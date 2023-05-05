@@ -24,7 +24,9 @@ function App() {
   //   setCounter(counter + n);
   // };
 
-  //usandop useCallback
+  //usando useCallback
+
+  //fazendo cash de funcoes q não mudam
 
   //usando calback para não usar o counter dentro das
   //dependencias
