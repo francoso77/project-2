@@ -1,39 +1,44 @@
+import P from 'prop-types';
 import './App.css';
-import { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+
+//const Button = ({ incrementButton }) => {
+//  return <button onClick={() => incrementButton(10)}>+</button>;
+//};
+
+//usando React.memo para não renderizar
+
+const Button = React.memo(function Button({ incrementButton }) {
+  console.log('Filho, renderizou');
+  return <button onClick={() => incrementButton(10)}>+</button>;
+});
+
+Button.propTypes = {
+  incrementButton: P.func,
+};
 
 function App() {
   const [counter, setCounter] = useState(0);
 
-  const handleClick = () => {
-    //setCounter(counter + 1);
-    setCounter((c) => c + 1);
-  };
+  // const incrementCounter = (n) => {
+  //   setCounter(counter + n);
+  // };
 
-  //componentDidUpdate --> executa toda vez que o component atualiza
+  //usandop useCallback
 
-  useEffect(() => {
-    console.log('componentDidUpdate');
-  });
+  //usando calback para não usar o counter dentro das
+  //dependencias
 
-  //componentDidMount --> executa UMA vez qdo renderiza
-
-  useEffect(() => {
-    console.log('componentDidMount');
-    //o segundo paramentro uma array de DEPENDENCIAS
-    //para exucutar uma vez vai vazio
+  const incrementCounter = useCallback((n) => {
+    setCounter((c) => c + n);
   }, []);
 
-  useEffect(() => {
-    console.log('Unsando Array de dependencias');
-    //se usar uma variável tipo COUNTER usar a base no []
-  }, [counter == 10]);
+  console.log('Pai, renderizou');
 
   return (
     <div className="App">
       <h1>Contador: {counter}</h1>
-      <button type="button" onClick={handleClick}>
-        +
-      </button>
+      <Button incrementButton={incrementCounter} />
     </div>
   );
 }
