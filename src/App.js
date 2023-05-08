@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 
 function App() {
   const [posts, setPosts] = useState([]);
+  const [value, setValue] = useState('');
 
   console.log('Componente Pai Renderizou');
 
@@ -17,6 +18,13 @@ function App() {
 
   return (
     <div className="App">
+      <p>
+        <input
+          type="search"
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+        />
+      </p>
       {posts.length > 0 &&
         posts.map((post) => {
           return (
