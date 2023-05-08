@@ -1,46 +1,32 @@
 import P from 'prop-types';
 import './App.css';
-import React, { useCallback, useEffect, useState } from 'react';
-
-//const Button = ({ incrementButton }) => {
-//  return <button onClick={() => incrementButton(10)}>+</button>;
-//};
-
-//usando React.memo para não renderizar
-
-const Button = React.memo(function Button({ incrementButton }) {
-  console.log('Filho, renderizou');
-  return <button onClick={() => incrementButton(10)}>+</button>;
-});
-
-Button.propTypes = {
-  incrementButton: P.func,
-};
+import { useState, useEffect } from 'react';
 
 function App() {
-  const [counter, setCounter] = useState(0);
+  const [posts, setPosts] = useState([]);
 
-  // const incrementCounter = (n) => {
-  //   setCounter(counter + n);
-  // };
+  console.log('Componente Pai Renderizou');
 
-  //usando useCallback
-
-  //fazendo cash de funcoes q não mudam
-
-  //usando calback para não usar o counter dentro das
-  //dependencias
-
-  const incrementCounter = useCallback((n) => {
-    setCounter((c) => c + n);
+  useEffect(() => {
+    setTimeout(() => {
+      fetch('https://jsonplaceholder.typicode.com/posts')
+        .then((r) => r.json())
+        .then((r) => setPosts(r));
+    }, 5000);
   }, []);
-
-  console.log('Pai, renderizou');
 
   return (
     <div className="App">
-      <h1>Contador: {counter}</h1>
-      <Button incrementButton={incrementCounter} />
+      {posts.length > 0 &&
+        posts.map((post) => {
+          return (
+            <div className="post" key={post.id}>
+              <h1>{post.title}</h1>
+              <p>{post.body}</p>
+            </div>
+          );
+        })}
+      {posts.length <= 0 && <p>Ainda não carregou os posts</p>}
     </div>
   );
 }
