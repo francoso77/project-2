@@ -1,65 +1,80 @@
-import { useReducer } from 'react';
+import { createContext, useContext } from 'react';
 import './App.css';
+import P from 'prop-types';
+import { useReducer } from 'react';
+import { useRef } from 'react';
 
-const globalState = {
+//actions.js
+export const actions = {
+  CHANGE_TITLE: 'CHANGE_TITLE',
+};
+
+//data.js
+export const globalState = {
   title: 'o título do objeto no Reducer',
   body: 'o body do Reducer',
   counter: 0,
 };
 
-const reducer = (state, action) => {
+//Reducer.js
+export const reducer = (state, action) => {
   switch (action.type) {
-    case 'muda': {
-      console.log('chamou muda com', action.payload);
+    case actions.CHANGE_TITLE: {
+      console.log('Mudar o título');
       return { ...state, title: action.payload };
     }
-    case 'inverter': {
-      console.log('Chamou inverter');
-      const { title } = state;
-      return { ...state, title: title.split('').reverse().join('') };
-    }
   }
-  console.log('Nenhuma action encontrada...');
+  console.log(action);
   return { ...state };
 };
 
-export default function App() {
+//AppContext.jsx
+//no javascript como o value do provider é o mesmo nome do state não
+//precisa passar como valor .. state: state
+
+export const Context = createContext();
+export const AppContext = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, globalState);
-  const { counter, title, body } = state;
+
+  const changeTitle = (payload) => {
+    dispatch({ type: actions.CHANGE_TITLE, payload });
+  };
 
   return (
-    <div>
-      <h1>
-        {title} {counter}
+    <>
+      <Context.Provider value={{ state, changeTitle }}>
+        {children}
+      </Context.Provider>
+    </>
+  );
+};
+
+AppContext.propTypes = {
+  children: P.node,
+};
+
+//H1 / index.jsx
+export const H1 = () => {
+  const context = useContext(Context);
+  const inputRef = useRef();
+
+  return (
+    <>
+      <input type="text" ref={inputRef} />
+      <h1 onClick={() => context.changeTitle(inputRef.current.value)}>
+        {context.state.title}
       </h1>
-      <button
-        onClick={() =>
-          dispatch({
-            type: 'muda',
-            payload: new Date().toLocaleString('pt-BR'),
-          })
-        }
-      >
-        Click
-      </button>
-      <button
-        onClick={() =>
-          dispatch({
-            type: 'inverter',
-          })
-        }
-      >
-        Invert
-      </button>
-      <button
-        onClick={() =>
-          dispatch({
-            type: 'qualquercoisa',
-          })
-        }
-      >
-        Sem Action
-      </button>
-    </div>
+    </>
+  );
+};
+
+//App.jsx
+export default function App() {
+  return (
+    <AppContext>
+      <div>
+        <H1 />
+      </div>
+    </AppContext>
   );
 }
