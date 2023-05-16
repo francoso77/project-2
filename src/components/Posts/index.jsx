@@ -8,8 +8,12 @@ export const Posts = () => {
   const { postsState, postsDispatch } = postsContext;
 
   useEffect(() => {
-    loadPosts(postsDispatch);
-
+    loadPosts(postsDispatch).then((dispatch) => {
+      if (isMounted.current.valueOf) {
+        console.log(isMounted, 'dentro do if');
+        dispatch();
+      }
+    });
     return () => {
       isMounted.current = false;
     };
