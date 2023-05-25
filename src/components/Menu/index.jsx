@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 export const Menu = () => {
   return (
@@ -11,8 +11,8 @@ export const Menu = () => {
         height: '60px',
       }}
     >
-      <Link to="/"> Home </Link>
-      <Link to="/abc"> Abc </Link>
+      <NavLink to="/">Home</NavLink>
+      <NavLink to="/abc">Abc</NavLink>
     </nav>
   );
 };
