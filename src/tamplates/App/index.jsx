@@ -3,7 +3,7 @@ import { CounterProvider } from '../../contexts/CounterProvider';
 import { PostsProvider } from '../../contexts/PostsProvider';
 import './styles.css';
 
-export default function App() {
+export const App = () => {
   return (
     <CounterProvider>
       <PostsProvider>
@@ -13,4 +13,4 @@ export default function App() {
       </PostsProvider>
     </CounterProvider>
   );
-}
+};

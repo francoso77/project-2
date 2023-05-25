@@ -30,7 +30,7 @@ module.exports = {
     },
   },
   rules: {
-    'react/react-in-jsx-scope': 'off',
-    'no-unused-vars': 'off',
+    'react/react-in-jsx-scope': 'error',
+    'no-unused-vars': 'on',
   },
 };

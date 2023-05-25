@@ -4,6 +4,7 @@ import { loadPosts } from '../../contexts/PostsProvider/actions';
 import { CounterContext } from '../../contexts/CounterProvider/context';
 import { decrementCounter } from '../../contexts/CounterProvider/actions';
 import { incrementCounter } from '../../contexts/CounterProvider/actions';
+import { Menu } from '../Menu';
 
 export const Posts = () => {
   const isMounted = useRef(true);
@@ -14,6 +15,7 @@ export const Posts = () => {
 
   useEffect(() => {
     loadPosts(postsDispatch).then((dispatch) => {
+      //é preciso desmontar a tela ... para a ação de carregar
       if (isMounted.current.valueOf) {
         console.log(isMounted, 'dentro do if');
         dispatch();
@@ -42,6 +44,7 @@ export const Posts = () => {
       {postsState.posts.map((posts) => (
         <p key={posts.id}>{posts.title}</p>
       ))}
+      <Menu />
     </div>
   );
 };
